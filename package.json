@@ -1,0 +1,40 @@
+{
+  "name": "project-archer",
+  "description": "A suite of sweet scripts to make project development and deployment a breeze.",
+  "author": {
+    "name": "Bogdan Mustiata",
+    "email": "bogdan.mustiata@gmail.com"
+  },
+  "bin": {
+    "archer-setup": "bin/archer.sh",
+    "archer-node-project": "lib/Project.js",
+    "archer-node-runtime": "lib/Runtime.js",
+    "archer-node-server": "lib/Server.js"
+  },
+  "version": "0.1.0",
+  "dependencies": {},
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-contrib-clean": "^0.6.0",
+    "grunt-mocha-test": "^0.12.7",
+    "grunt-typescript": "^0.7.0",
+    "mocha": "^2.3.2"
+  },
+  "keywords": [],
+  "main": "./lib/project-archer.js",
+  "bugs": {
+    "url": "https://github.com/bmustiata/project-archer/issues"
+  },
+  "licenses": [
+    {
+      "type": "BSD",
+      "url": "https://github.com/bmustiata/project-archer/blob/master/LICENSE"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bmustiata/project-archer.git"
+  },
+  "readmeFilename": "README.md",
+  "homepage": "http://blog.ciplogic.com"
+}
