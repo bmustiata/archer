@@ -8,21 +8,26 @@ export interface Environment {
 	/**
 	 * Sets the given variable into the host environment variable.
 	 */
-	setVariable(name: string, value: string) : void;
+	setVariable(name: string, value: string) : Environment;
 	
 	/**
 	 * Log the message.
 	 */
-	log(message: string) : void;
+	log(message: string) : Environment;
 	
 	/**
 	 * Define a new command, that will launch the given string when
 	 * called.
 	 */
-	defineCommand(name: string, executeWhat: string) : void;
+	defineCommand(name: string, executeWhat: string) : Environment;
 	
 	/**
 	 * Remove a previously set command if it exists.
 	 */
-	removeCommand(name: string) : void; 
+	removeCommand(name: string) : Environment;
+	
+	/**
+	 * Execute a command in the environment.
+	 */
+	execute(what: string) : Environment;
 }
