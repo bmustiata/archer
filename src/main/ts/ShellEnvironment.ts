@@ -1,7 +1,9 @@
 import { Environment } from "./Environment";
 
 /**
- * Execute the appropriate commands into a shell environment.
+ * Generates commands for the shell in order to alter it via simple evals
+ * such as: eval `$(node $CURRENT_FOLDER/../lib/Project.js $@)`. The commands
+ * are only tested against bash.
  */
 export class ShellEnvironment implements Environment {
 	/**
