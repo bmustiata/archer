@@ -8,14 +8,14 @@ export class ShellEnvironment implements Environment {
 	 * Sets the given variable into the host environment variable.
 	 */
 	setVariable(name: string, value: string) : void {
-		console.log(name + "='" + value + "'");
+		process.stdout.write(shellEscape(name) + "='" + shellEscape(value) + "';");
 	}
 	
 	/**
 	 * Log the message.
 	 */
 	log(message: string) : void {
-		console.log("echo '" + message + "'");
+		process.stdout.write("echo -e $'" + shellEscape(message) + "';");
 	}
 	
 	/**
@@ -23,13 +23,21 @@ export class ShellEnvironment implements Environment {
 	 * called.
 	 */
 	defineCommand(name: string, executeWhat: string) : void {
-		console.log("alias " + name + "='" + executeWhat + "'");
+		process.stdout.write("alias $'" + shellEscape(name) + "'=$'" + shellEscape(executeWhat) + "';");
 	}
 	
 	/**
 	 * Remove a previously set command if it exists.
 	 */
 	removeCommand(name: string) : void {
-		console.log("unalias " + name);
-	} 
+		process.stdout.write("unalias $'" + shellEscape(name) + "';");
+	}
 }
+
+/**
+ * Escapes a string, so it can be outputed by an `echo -e $'message'` command.
+ */
+function shellEscape(message : string) : string {
+	return message.replace(/\n/g, "\\n")
+		.replace(/'/g, "\\'");
+} 
