@@ -16,6 +16,7 @@
     "core-lang": "^1.1.1",
     "core-promise": "^0.3.4",
     "js-yaml": "^3.4.2",
+    "mapstrace": "^1.0.0",
     "nomnom": "^1.8.1"
   },
   "devDependencies": {

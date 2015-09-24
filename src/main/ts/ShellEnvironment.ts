@@ -52,6 +52,10 @@ export class ShellEnvironment implements Environment {
  * Escapes a string, so it can be outputed by an `echo -e $'message'` command.
  */
 function shellEscape(message : string) : string {
+	if (typeof message !== "string") {
+		message = "" + message;
+	}
+	
 	return message.replace(/\n/g, "\\n")
 		.replace(/'/g, "\\'");
 } 
