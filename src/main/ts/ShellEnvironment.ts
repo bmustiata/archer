@@ -6,11 +6,13 @@ import { Environment } from "./Environment";
  * are only tested against bash.
  */
 export class ShellEnvironment implements Environment {
+	_execution = "";
+	
 	/**
 	 * Sets the given variable into the host environment variable.
 	 */
 	setVariable(name: string, value: string) : Environment {
-		process.stdout.write(shellEscape(name) + "='" + shellEscape(value) + "';");
+		this._execution += shellEscape(name) + "='" + shellEscape(value) + "'\n";
 		return this;
 	}
 	
@@ -18,7 +20,7 @@ export class ShellEnvironment implements Environment {
 	 * Log the message.
 	 */
 	log(message: string) : Environment {
-		process.stdout.write("echo -e $'" + shellEscape(message) + "';");
+		this._execution += "echo -e $'" + shellEscape(message) + "'\n";
 		return this;
 	}
 	
@@ -27,7 +29,9 @@ export class ShellEnvironment implements Environment {
 	 * called.
 	 */
 	defineCommand(name: string, executeWhat: string) : Environment {
-		process.stdout.write("alias $'" + shellEscape(name) + "'=$'" + shellEscape(executeWhat) + "';");
+		this._execution += "function " + shellEscape(name) + "() {\n\t" + 
+				executeWhat.split("\n").join("\n\t") + 
+				"\n}\n";
 		return this;
 	}
 	
@@ -35,7 +39,7 @@ export class ShellEnvironment implements Environment {
 	 * Remove a previously set command if it exists.
 	 */
 	removeCommand(name: string) : Environment {
-		process.stdout.write("unalias $'" + shellEscape(name) + "';");
+		this._execution += "unset -f " + shellEscape(name) + "\n";
 		return this;
 	}
 	
@@ -43,7 +47,12 @@ export class ShellEnvironment implements Environment {
 	 * Execute the command in the user environment.
 	 */
 	execute(what: string) : Environment {
-		process.stdout.write(shellEscape(what) + ";");
+		this._execution += shellEscape(what) + "\n";
+		return this;
+	}
+	
+	flush() : Environment {
+		console.log(this._execution);
 		return this;
 	}
 }

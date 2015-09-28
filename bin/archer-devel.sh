@@ -13,3 +13,15 @@ function server() {
 function runtime() {
 	eval $(node $CURRENT_FOLDER/../lib/Runtime.js $@)
 }
+
+function projectcat() {
+node $CURRENT_FOLDER/../lib/Project.js $@
+}
+
+function servercat() {
+node $CURRENT_FOLDER/../lib/Server.js $@
+}
+
+function runtimecat() {
+node $CURRENT_FOLDER/../lib/Runtime.js $@
+}

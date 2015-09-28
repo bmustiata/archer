@@ -30,4 +30,10 @@ export interface Environment {
 	 * Execute a command in the environment.
 	 */
 	execute(what: string) : Environment;
+	
+	/**
+	 * Flushes the built script to the execution environment. The flush() code
+	 * can be called only once, when the script has done its processing.
+	 */
+	flush() : Environment;
 }

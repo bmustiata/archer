@@ -1,2 +1,2 @@
-tsc --watch src/main/ts/* --outDir lib/
+tsc --watch src/main/ts/* --sourceMap --module commonjs --outDir lib/
 
