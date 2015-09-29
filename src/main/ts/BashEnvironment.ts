@@ -5,7 +5,7 @@ import { Environment } from "./Environment";
  * such as: eval `$(node $CURRENT_FOLDER/../lib/Project.js $@)`. The commands
  * are only tested against bash.
  */
-export class ShellEnvironment implements Environment {
+export class BashEnvironment implements Environment {
 	_execution = "";
 	
 	/**

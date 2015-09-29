@@ -3,21 +3,22 @@
 /// <reference path="../../../node_modules/core-promise/core-promise.d.ts"/>
 /// <reference path="../../../node_modules/core-lang/core-lang.d.ts"/>
 
-import { ShellEnvironment } from "./ShellEnvironment";
-import nomnom = require("nomnom");
-import fs = require("fs");
+import { Environment } from "./Environment"
+import { BashEnvironment } from "./BashEnvironment"
+import nomnom = require("nomnom")
+import fs = require("fs")
 
-import {DefaultPromise as Promise} from "core-promise";
-import {list, XList} from "core-lang";
-import * as path from "path";
-import * as jsYaml from "js-yaml";
+import {DefaultPromise as Promise} from "core-promise"
+import {list, XList} from "core-lang"
+import * as path from "path"
+import * as jsYaml from "js-yaml"
 
 interface Project {
 	name: string,
 	file: FileName;
 }
 
-var shellEnvironment = new ShellEnvironment();
+var shellEnvironment = new BashEnvironment();
 
 // parse the parameters from the string.
 var shellParameters = nomnom.script("project")
@@ -51,7 +52,20 @@ interface FileStat {
 	stat: fs.Stats
 }
 
-shellEnvironment.defineCommand("cls", "clear\necho \"wut $@\"");
+/**
+ * Project data that is being read from the yml files.
+ */
+interface ProjectData {
+	name? : string
+	layout? : string
+	
+	activate? : string
+	deactivate? : string
+
+	requires? : Array<string>	
+	exports? : { [name :string] : string }
+	commands? : { [name :string] : string }
+}
 
 if (shellParameters.list) {
 	listProjects(shellEnvironment);
@@ -69,14 +83,14 @@ if (shellParameters.list) {
 
 shellEnvironment.flush();
 
-function createNewProject(shellEnvironment : ShellEnvironment, shellParameters) {
+function createNewProject(shellEnvironment : Environment, shellParameters) {
 	var projectsFolder: string = archerHome("projects"); 
 
 	shellEnvironment.execute("mkdir -p " + path.normalize(projectsFolder));
 	shellEnvironment.execute("$EDITOR " + path.join(projectsFolder, shellParameters.new + ".yml"));
 }
 
-function editProject(shellEnvironment : ShellEnvironment, shellParameters) {
+function editProject(shellEnvironment : Environment, shellParameters) {
 	var projectsFolder: string = archerHome("projects"); 
 	var targetProject : string = shellParameters._.length ? shellParameters._[0] : currentProject();
 
@@ -87,7 +101,26 @@ function currentProject() {
 	return "test";
 }
 
-function listProjects(shellEnvironment : ShellEnvironment) {
+function emptyProjectsRun(shellEnvironment: Environment) {
+	shellEnvironment.log("empty projects run");
+}
+
+/**
+ * Select the given project.
+ */
+function selectProject(shellEnvironment: Environment, params : Array<string>) {
+	var projectName = params[0]
+	var projectsFolder: string = archerHome("projects")
+
+	var projectFile = path.join(projectsFolder, projectName + ".yml")
+	
+	var fileData = fs.readFileSync(projectFile, 'utf-8')
+	var projectData = jsYaml.safeLoad(fileData)
+	
+	shellEnvironment.log("select project: " + JSON.stringify(projectData))
+}
+
+function listProjects(shellEnvironment : Environment) {
 	var projectsFolder: string = archerHome("projects"); 
 	
 	try {
@@ -110,14 +143,6 @@ function listProjects(shellEnvironment : ShellEnvironment) {
 
 function readProjectYml(it: FileStat) : Project {
 	return jsYaml.safeLoad(it.file.fullPath);
-}
-
-function emptyProjectsRun(shellEnvironment: ShellEnvironment) {
-	shellEnvironment.log("empty projects run");
-}
-
-function selectProject(shellEnvironment: ShellEnvironment, params : Array<string>) {
-	shellEnvironment.log("select project: " + params);
 }
 
 function readDir(folderPath: string) : Array<FileName> {
