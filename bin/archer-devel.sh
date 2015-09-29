@@ -3,25 +3,26 @@
 CURRENT_FOLDER=`pwd`
 
 function project() {
-	eval $(node $CURRENT_FOLDER/../lib/Project.js $@)
+	CODE=`node $CURRENT_FOLDER/../lib/Project.js $@`
+	eval $CODE
 }
 
 function server() {
-	eval $(node $CURRENT_FOLDER/../lib/Server.js $@)
+	eval `node $CURRENT_FOLDER/../lib/Server.js $@`
 }
 
 function runtime() {
-	eval $(node $CURRENT_FOLDER/../lib/Runtime.js $@)
+	eval `node $CURRENT_FOLDER/../lib/Runtime.js $@`
 }
 
 function projectcat() {
-node $CURRENT_FOLDER/../lib/Project.js $@
+	node $CURRENT_FOLDER/../lib/Project.js $@
 }
 
 function servercat() {
-node $CURRENT_FOLDER/../lib/Server.js $@
+	node $CURRENT_FOLDER/../lib/Server.js $@
 }
 
 function runtimecat() {
-node $CURRENT_FOLDER/../lib/Runtime.js $@
+	node $CURRENT_FOLDER/../lib/Runtime.js $@
 }

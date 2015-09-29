@@ -29,7 +29,7 @@ export class ShellEnvironment implements Environment {
 	 * called.
 	 */
 	defineCommand(name: string, executeWhat: string) : Environment {
-		this._execution += "function " + shellEscape(name) + "() {\n\t" + 
+		this._execution += "function " + shellEscape(name) + "() {\t" + 
 				executeWhat.split("\n").join("\n\t") + 
 				"\n}\n";
 		return this;
@@ -51,8 +51,11 @@ export class ShellEnvironment implements Environment {
 		return this;
 	}
 	
+	/**
+	 * Flush the commands to the actual executor.
+	 */
 	flush() : Environment {
-		console.log(this._execution);
+		console.log(this._execution.replace(/\n/g, ";"));
 		return this;
 	}
 }
