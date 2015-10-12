@@ -56,4 +56,3 @@ Project: SomeWebApp
 Server : Tomcat_7 (running)
 Runtime: Java_8
 ```
-
