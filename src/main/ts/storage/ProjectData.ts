@@ -47,5 +47,11 @@ interface ProjectData {
 }
 
 export function readProjectYml(data: string) : ProjectData {
-	return jsYaml.safeLoad(data);
+	var project = jsYaml.safeLoad(data).project;
+	
+	if (typeof project.requires == "string") {
+		project.requires = [ project.requires ]
+	}
+	
+	return project;
 }
