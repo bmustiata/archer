@@ -56,7 +56,10 @@ export function selectProject(shellEnvironment: Environment, params : Array<stri
 }
 
 function exportCommands(commands: {[name:string] : string}, shellEnvironment: Environment) {
+	shellEnvironment.log("Commands: ");
+	
 	for (var command in commands) {
+		shellEnvironment.log("   " + command);
 		shellEnvironment.defineCommand(command, commands[command])
 	}
 }

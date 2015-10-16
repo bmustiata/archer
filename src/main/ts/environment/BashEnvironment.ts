@@ -38,7 +38,9 @@ export class BashEnvironment implements Environment {
 	 */
 	defineCommand(name: string, executeWhat: string) : Environment {
 		this._execution += "function " + shellEscape(name) + "() {\t" + 
-				executeWhat.split("\n").join("\n\t") + 
+				executeWhat.split("\n")
+					.filter((line) => !!line)
+					.join("\n\t") + 
 				"\n}\n";
 		return this;
 	}
