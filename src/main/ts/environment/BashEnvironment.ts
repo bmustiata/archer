@@ -12,7 +12,7 @@ export class BashEnvironment implements Environment {
 	 * Sets the given variable into the host environment variable.
 	 */
 	setVariable(name: string, value: string) : Environment {
-		this._execution += shellEscape(name) + "='" + shellEscape(value) + "'\n";
+		this._execution += "export " + shellEscape(name) + "='" + shellEscape(value) + "'\n";
 		return this;
 	}
 	

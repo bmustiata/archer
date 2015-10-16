@@ -24,21 +24,26 @@ export function selectProject(shellEnvironment: Environment, params : Array<stri
 		
 		return; // => bailing out
 	}
-	
-	if (currentProject() == projectName) {
+
+	var oldProjectName = currentProject();
+		
+	if (oldProjectName == projectName) {
 		shellEnvironment.log("The current project is already: " + projectName + ".");
 		
 		//return; // => bailing out
 	}
 	
 	// 2. deactivate the previous project.
-	var oldProject = readProjectData(currentProject())
-	executeCommands(oldProject.deactivate, shellEnvironment)
+	if (oldProjectName) {
+		var oldProject = readProjectData(oldProjectName)
+		executeCommands(oldProject.deactivate, shellEnvironment)
+	}
 	
 	// 3. activate the current step
 	executeCommands(projectData.activate, shellEnvironment)
 
-	shellEnvironment.log("Active project: " + projectData.name);	
+	shellEnvironment.log("Active project: " + projectData.name);
+	shellEnvironment.setVariable("CIPLOGIC_ARCHER_CURRENT_PROJECT", projectName)	
 	//shellEnvironment.log("select project: " + JSON.stringify(projectData))
 }
 

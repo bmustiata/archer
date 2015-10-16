@@ -1,7 +1,13 @@
 import * as path from "path";
 
-export function currentProject() {
-	return "test";
+/**
+ * Returns the current project ID. This corresponds
+ * to the YML file where the project is described.
+ */
+export function currentProject() : string {
+	var currentProject = process.env.CIPLOGIC_ARCHER_CURRENT_PROJECT;
+	
+	return currentProject;
 }
 
 /**

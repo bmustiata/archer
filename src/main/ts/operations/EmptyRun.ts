@@ -1,5 +1,10 @@
 import {Environment} from "../environment/Environment"
+import {currentProject} from "../environment/ReadEnvironment"
 
 export function emptyProjectsRun(shellEnvironment: Environment) {
-	shellEnvironment.log("empty projects run")
+	var project = currentProject()
+	
+	var projectName = project ? project : "<none>"
+	
+	shellEnvironment.log("Current project: " + projectName)
 }
