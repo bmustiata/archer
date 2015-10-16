@@ -11,6 +11,11 @@ export interface Environment {
 	setVariable(name: string, value: string) : Environment;
 	
 	/**
+	 * Unsets the given variable name from the host environment.
+	 */
+	unsetVariable(name: string) : Environment;
+	
+	/**
 	 * Log the message.
 	 */
 	log(message: string) : Environment;

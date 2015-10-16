@@ -17,6 +17,14 @@ export class BashEnvironment implements Environment {
 	}
 	
 	/**
+	 * Unsets the given variable from the host environment.
+	 */
+	unsetVariable(name: string): Environment {
+		this._execution += "unset " + shellEscape(name) + "\n";
+		return this;
+	}
+	
+	/**
 	 * Log the message.
 	 */
 	log(message: string) : Environment {

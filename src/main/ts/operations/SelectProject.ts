@@ -37,14 +37,40 @@ export function selectProject(shellEnvironment: Environment, params : Array<stri
 	if (oldProjectName) {
 		var oldProject = readProjectData(oldProjectName)
 		executeCommands(oldProject.deactivate, shellEnvironment)
+		unsetCommands(projectData.commands, shellEnvironment)
+		unsetVariables(oldProject.exports, shellEnvironment)
 	}
 	
-	// 3. activate the current step
+	// 3. make the variable exports
+	for (var export_name in projectData.exports) {
+		shellEnvironment.setVariable(export_name, projectData.exports[export_name])
+	}
+	
+	// 4. activate the current step
 	executeCommands(projectData.activate, shellEnvironment)
-
-	shellEnvironment.log("Active project: " + projectData.name);
+	exportCommands(projectData.commands, shellEnvironment)	
+	
+	// 5. export the commands.
+	shellEnvironment.log("Activated project: " + projectData.name)
 	shellEnvironment.setVariable("CIPLOGIC_ARCHER_CURRENT_PROJECT", projectName)	
-	//shellEnvironment.log("select project: " + JSON.stringify(projectData))
+}
+
+function exportCommands(commands: {[name:string] : string}, shellEnvironment: Environment) {
+	for (var command in commands) {
+		shellEnvironment.defineCommand(command, commands[command])
+	}
+}
+
+function unsetCommands(commands: {[name:string] : string}, shellEnvironment: Environment) {
+	for (var command in commands) {
+		shellEnvironment.removeCommand(command)
+	}
+}
+
+function unsetVariables(variables: {[name:string] : string}, shellEnvironment: Environment) {
+	for (var variable in variables) {
+		shellEnvironment.unsetVariable(variable)
+	}
 }
 
 function executeCommands(commands: string, shellEnvironment: Environment) {

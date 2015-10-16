@@ -38,7 +38,7 @@ interface ProjectData {
 	 * exports will be evaluated before the activate, and their values
 	 * are evaluated as shell scritps. 
 	 */
-	exports? : { [name :string] : string }
+	export? : { [name :string] : string }
 	
 	/**
 	 * Commands that are defined by this project.
