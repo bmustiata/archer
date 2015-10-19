@@ -11,16 +11,16 @@ var shellEnvironment = new BashEnvironment();
 var shellParameters = parseParameters(shellEnvironment); 
 
 if (shellParameters.list) {
-	listProjects(shellEnvironment);
+	listProjects(shellEnvironment, shellParameters);
 } else if (shellParameters["new"]) {
 	createNewProject(shellEnvironment, shellParameters);
 } else if (shellParameters["edit"]) {
 	editProject(shellEnvironment, shellParameters);
 } else { // project selection or empty run.
 	if (!shellParameters._.length) {
-		emptyProjectsRun(shellEnvironment);
+		emptyProjectsRun(shellEnvironment, shellParameters);
 	} else {
-		selectProject(shellEnvironment, shellParameters._);
+		selectProject(shellEnvironment, shellParameters);
 	}
 }
 

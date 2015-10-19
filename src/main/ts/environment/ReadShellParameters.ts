@@ -7,6 +7,8 @@ export interface ParsedShellParameters {
 	new?: string
 	edit?: boolean
 	list?: boolean
+	layout?: boolean
+	internalRunMode: string
 	_: Array<string>
 }
 
@@ -24,8 +26,16 @@ export function parseParameters(shellEnvironment: Environment) : ParsedShellPara
 			help: "Edit the given project, or the current project.",		
 			flag: true
 		})
-		.option("list", {
+		.option("layout", {
 			abbr: "l",
+			help: "Specify that we want to use the layouts.",
+			flag: true
+		})
+		.option("internalRunMode", {
+			help: "Specify the internal command that is used (e.g. project, server, etc)",
+			required: true
+		})
+		.option("list", {
 			help: "List the available projects.",
 			flag: true
 		}).printer((message, code?) => {

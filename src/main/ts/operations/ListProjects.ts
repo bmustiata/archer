@@ -2,10 +2,13 @@ import * as path from "path"
 
 import {Environment} from "../environment/Environment"
 import {archerHome} from "../environment/ReadEnvironment"
+import {ParsedShellParameters} from "../environment/ReadShellParameters"
 import {FileStat, fstat, readDir} from "../storage/IO"
 
-export function listProjects(shellEnvironment : Environment) {
-	var projectsFolder: string = archerHome("projects"); 
+export function listProjects(shellEnvironment : Environment, shellParameters: ParsedShellParameters) {
+	var projectsFolder: string = shellParameters.layout ?
+			archerHome(shellParameters.internalRunMode + "s/layouts") : 
+			archerHome(shellParameters.internalRunMode + "s") 
 	
 	try {
 		shellEnvironment.execute("mkdir -p " + path.normalize(projectsFolder));
