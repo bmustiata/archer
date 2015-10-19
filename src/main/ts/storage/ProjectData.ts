@@ -5,53 +5,84 @@ import {FileStat} from "./IO";
 /**
  * Project data that is being read from the yml files.
  */
-interface ProjectData {
+export interface ProjectData {
 	/**
 	 * The visual display name of the project.
 	 */
-	name? : string
+	name : string
 	
 	/**
 	 * The parent project where it inherits the activate/deactivate
 	 * scripts, or requires, exports and commands.
 	 */
-	layout? : string
+	layouts : Array<string>
 	
 	/**
-	 * Script to execute when the project is initially activated.
+	 * Scripts to execute when the project is initially activated.
+	 * The scripts are ordered from the existing layouts.
 	 */
-	activate? : string
+	activate : Array<string>
 	
 	/**
-	 * Script to execute when the project is deactivated.
+	 * Scripts to execute when the project is deactivated.
+	 * The scripts are ordered from the existing layouts,
+	 * in reverse order.
 	 */
-	deactivate? : string
+	deactivate : Array<string>
 
 	/**
 	 * Environment variables that are required to be present for this
 	 * project to be activated.
 	 */
-	requires? : Array<string>
+	requires : Array<string>
 	
 	/**
 	 * Define the variables that are exported by this project. These
 	 * exports will be evaluated before the activate, and their values
 	 * are evaluated as shell scritps. 
 	 */
-	export? : { [name :string] : string }
+	exports : { [name :string] : string }
 	
 	/**
 	 * Commands that are defined by this project.
 	 */
-	commands? : { [name :string] : string }
+	commands : { [name :string] : string }
 }
 
+/**
+ * Reads the YML data for a given project.
+ */
 export function readProjectYml(data: string) : ProjectData {
-	var project = jsYaml.safeLoad(data).project;
+	var loadedData = jsYaml.safeLoad(data)
+	var project = loadedData.project || loadedData.layout
 	
-	if (typeof project.requires == "string") {
-		project.requires = [ project.requires ]
+	ensureArray(project, "requires")
+	ensureArray(project, "layouts")
+	ensureArray(project, "activate")
+	ensureArray(project, "deactivate")
+	
+	if (!project.exports) {
+		project.exports = {}
+	}
+	if (!project.commands) {
+		project.commands = {}
+	}
+	if (!project.name) {
+		project.name = "<not defined>"
+	}
+
+	return project;
+}
+
+/**
+ * Ensures the given value is an array.
+ */
+function ensureArray(obj: any, propertyName: string) : void {
+	if (typeof obj[propertyName] == "string") {
+		obj[propertyName] = [ obj[propertyName] ]
 	}
 	
-	return project;
+	if (typeof obj[propertyName] == "undefined") {
+		obj[propertyName] = [];
+	}
 }

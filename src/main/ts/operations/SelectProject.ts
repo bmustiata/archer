@@ -3,7 +3,7 @@ import * as fs from "fs"
 
 import {Environment} from "../environment/Environment"
 import {archerHome, currentProject} from "../environment/ReadEnvironment"
-import {readProjectYml} from "../storage/ProjectData"
+import {readProjectYml, ProjectData} from "../storage/ProjectData"
 
 /**
  * Select the given project.
@@ -15,7 +15,8 @@ export function selectProject(shellEnvironment: Environment, params : Array<stri
 	// 1. check if the project can be activated:
 	var requiredEnvironmentVariables = projectData.requires || []
 	var missingVariables = requiredEnvironmentVariables.filter(
-		(v) => typeof process.env[v] == "undefined"
+		(v) => typeof process.env[v] == "undefined" &&
+			   !projectData.exports[v]
 	)
 	
 	if (missingVariables.length > 0) {
@@ -76,19 +77,60 @@ function unsetVariables(variables: {[name:string] : string}, shellEnvironment: E
 	}
 }
 
-function executeCommands(commands: string, shellEnvironment: Environment) {
+function executeCommands(commands: Array<string>, shellEnvironment: Environment) {
 	if (commands) {
-		commands.split(/\n/)
+		commands.join("\n") // merge all the scripts
+			.split(/\n/)
 			.filter(command => command.trim() != "")
 			.forEach(command => shellEnvironment.execute(command) )
 	}
 }
 
-function readProjectData(projectName: string) {
-	var projectsFolder: string = archerHome("projects")
+/**
+ * Read the project data for the given file, including the layouts.
+ */
+function readProjectData(projectName: string, projectsFolder? : string) : ProjectData {
+	projectsFolder = projectsFolder ? projectsFolder : archerHome("projects")
 
 	var projectFile = path.join(projectsFolder, projectName + ".yml")
 	var fileData = fs.readFileSync(projectFile, 'utf-8')
 	
-	return readProjectYml(fileData)
+	var result : ProjectData = {
+		name: "<none>",
+		layouts: [],
+		requires: [],
+		activate: [],
+		deactivate: [],
+		commands: {},
+		exports: {}
+	};
+	var projectData = readProjectYml(fileData)
+	
+	projectData.layouts.forEach((layout, index) => {
+		var layoutData = readProjectData(layout, archerHome("projects/layouts"))
+		mix(result, layoutData)
+	});
+	
+	result.layouts = projectData.layouts
+	result.name = projectData.name
+	
+	return mix(result, projectData)
+}
+
+/**
+ * Mix in the requires, activate and deactivate scripts and commands and exports.
+ */
+function mix(source : ProjectData, extra : ProjectData) : ProjectData {
+	source.requires.push(...extra.requires)
+	source.activate.push(...extra.activate)
+	source.deactivate.splice(0, 0, ...extra.deactivate)
+	
+	for (var k in extra.commands) {
+		source.commands[k] = extra.commands[k]
+	}
+	for (var k in extra.exports) {
+		source.exports[k] = extra.exports[k]
+	}
+
+	return source;
 }
