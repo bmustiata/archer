@@ -1,13 +1,5 @@
-# this file should be sourced, and not executed as a new script
+#!/usr/bin/env node
 
-function project() {
-	eval $(archer-node-project $@)
-}
+var path = require("path")
 
-function server() {
-	eval $(archer-node-server $@)
-}
-
-function runtime() {
-	eval $(archer-node-runtime $@)
-}
+require(path.join(__dirname, "/../target/out/ShellRegistration.js"));

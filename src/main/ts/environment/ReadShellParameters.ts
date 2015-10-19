@@ -1,4 +1,5 @@
 /// <reference path="../../../../typings/node/node.d.ts"/>
+/// <reference path="../../../../typings/nomnom/nomnom.d.ts"/>
 
 import * as nomnom from "nomnom";
 import {Environment} from "./Environment";

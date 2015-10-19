@@ -1,4 +1,5 @@
-import * as path from "path";
+import * as path from "path"
+import {ParsedShellParameters} from "./ReadShellParameters"
 
 /**
  * Returns the current project ID. This corresponds
@@ -29,4 +30,13 @@ export function archerHome(subPath?: string) : string {
 	} else {
 		return result;
 	}
+}
+
+/**
+ * Exports the chosen project work folder.
+ */
+export function projectFolder(shellParameters: ParsedShellParameters) : string {
+	return shellParameters.layout ?
+			archerHome(shellParameters.internalRunMode + "s/layouts") : 
+			archerHome(shellParameters.internalRunMode + "s") 
 }

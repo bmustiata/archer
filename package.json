@@ -6,10 +6,7 @@
     "email": "bogdan.mustiata@gmail.com"
   },
   "bin": {
-    "archer-setup": "bin/archer.sh",
-    "archer-node-project": "lib/Project.js",
-    "archer-node-runtime": "lib/Runtime.js",
-    "archer-node-server": "lib/Server.js"
+    "archer": "bin/archer.sh"
   },
   "version": "0.1.0",
   "dependencies": {
@@ -27,7 +24,6 @@
     "mocha": "^2.3.2"
   },
   "keywords": [],
-  "main": "./lib/project-archer.js",
   "bugs": {
     "url": "https://github.com/bmustiata/project-archer/issues"
   },

@@ -13,7 +13,7 @@ module.exports = function(grunt) {
     grunt.initConfig({
         clean: {
             dist : [
-                "lib/"
+                "target/"
             ],
 
             test : [
@@ -29,7 +29,7 @@ module.exports = function(grunt) {
                     declaration: true,
                 },
                 files: [{
-                    dest: "lib/",
+                    dest: "target/out/",
                     src: [
                         "src/main/ts/**/*.ts",
                         "src/main/ts/**/*.d.ts"

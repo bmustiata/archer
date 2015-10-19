@@ -1,3 +1,5 @@
+/// <reference path="../../../../typings/js-yaml/js-yaml.d.ts"/>
+
 import * as jsYaml from "js-yaml";
 
 import {FileStat} from "./IO";
@@ -54,7 +56,7 @@ export interface ProjectData {
  */
 export function readProjectYml(data: string) : ProjectData {
 	var loadedData = jsYaml.safeLoad(data)
-	var project = loadedData.project || loadedData.layout
+	var project = loadedData.config || loadedData.layout
 	
 	ensureArray(project, "requires")
 	ensureArray(project, "layouts")

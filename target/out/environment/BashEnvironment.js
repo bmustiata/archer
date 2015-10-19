@@ -11,7 +11,14 @@ var BashEnvironment = (function () {
      * Sets the given variable into the host environment variable.
      */
     BashEnvironment.prototype.setVariable = function (name, value) {
-        this._execution += shellEscape(name) + "='" + shellEscape(value) + "'\n";
+        this._execution += "export " + shellEscape(name) + "='" + shellEscape(value) + "'\n";
+        return this;
+    };
+    /**
+     * Unsets the given variable from the host environment.
+     */
+    BashEnvironment.prototype.unsetVariable = function (name) {
+        this._execution += "unset " + shellEscape(name) + "\n";
         return this;
     };
     /**
@@ -27,7 +34,9 @@ var BashEnvironment = (function () {
      */
     BashEnvironment.prototype.defineCommand = function (name, executeWhat) {
         this._execution += "function " + shellEscape(name) + "() {\t" +
-            executeWhat.split("\n").join("\n\t") +
+            executeWhat.split("\n")
+                .filter(function (line) { return !!line; })
+                .join("\n\t") +
             "\n}\n";
         return this;
     };

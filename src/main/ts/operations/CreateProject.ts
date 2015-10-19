@@ -1,14 +1,12 @@
 import * as path from "path"
 
 import {Environment} from "../environment/Environment"
-import {archerHome} from "../environment/ReadEnvironment" 
+import {projectFolder} from "../environment/ReadEnvironment" 
 import {ParsedShellParameters} from "../environment/ReadShellParameters" 
 
 export function createNewProject(shellEnvironment : Environment, shellParameters: ParsedShellParameters) {
-	var projectsFolder: string = shellParameters.layout ? 
-			archerHome(shellParameters.internalRunMode + "s/layouts") : 
-			archerHome(shellParameters.internalRunMode + "s") 
+	var folder: string = projectFolder(shellParameters) 
 
-	shellEnvironment.execute("mkdir -p " + path.normalize(projectsFolder));
-	shellEnvironment.execute("$EDITOR " + path.join(projectsFolder, shellParameters.new + ".yml"));
+	shellEnvironment.execute("mkdir -p " + folder);
+	shellEnvironment.execute("$EDITOR " + path.join(folder, shellParameters.new + ".yml"));
 }
