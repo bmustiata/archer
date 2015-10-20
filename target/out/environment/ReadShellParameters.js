@@ -16,7 +16,6 @@ function parseParameters(shellEnvironment) {
         flag: true
     })
         .option("layout", {
-        abbr: "l",
         help: "Specify that we want to use the layouts.",
         flag: true
     })
@@ -25,6 +24,7 @@ function parseParameters(shellEnvironment) {
         required: true
     })
         .option("list", {
+        abbr: "l",
         help: "List the available projects.",
         flag: true
     }).printer(function (message, code) {

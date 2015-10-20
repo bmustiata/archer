@@ -5,7 +5,7 @@ var jsYaml = require("js-yaml");
  */
 function readProjectYml(data) {
     var loadedData = jsYaml.safeLoad(data);
-    var project = loadedData.config || loadedData.layout;
+    var project = loadedData.config || loadedData.layout || { name: "<broken data>" };
     ensureArray(project, "requires");
     ensureArray(project, "layouts");
     ensureArray(project, "activate");

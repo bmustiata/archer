@@ -1,10 +1,10 @@
-var path = require("path");
+var fs = require("fs");
 var ReadEnvironment_1 = require("../environment/ReadEnvironment");
 var IO_1 = require("../storage/IO");
+var ProjectData_1 = require("../storage/ProjectData");
 function listProjects(shellEnvironment, shellParameters) {
     var folder = ReadEnvironment_1.projectFolder(shellParameters);
     try {
-        shellEnvironment.execute("mkdir -p " + path.normalize(folder));
         IO_1.readDir(folder)
             .map(function (it) {
             return {
@@ -13,7 +13,15 @@ function listProjects(shellEnvironment, shellParameters) {
             };
         })
             .filter(function (it) { return it.stat && it.stat.isFile(); })
-            .forEach(function (it) { return shellEnvironment.log(it.file.name); });
+            .map(function (it) {
+            var fileData = fs.readFileSync(it.file.fullPath, 'utf-8');
+            var projectData = ProjectData_1.readProjectYml(fileData);
+            return {
+                fileName: it.file.name,
+                projectName: projectData.name
+            };
+        })
+            .forEach(function (it) { return shellEnvironment.log(it.fileName + ": " + it.projectName); });
     }
     catch (e) {
         shellEnvironment.log("ERROR: " + e.toString() + ':\n' + e.stack);

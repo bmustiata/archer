@@ -39,7 +39,7 @@ export function selectProject(shellEnvironment: Environment, shellParameters: Pa
 	if (oldProjectName) {
 		var oldProject = readProjectData(oldProjectName, shellParameters.internalRunMode)
 		executeCommands(oldProject.deactivate, shellEnvironment)
-		unsetCommands(projectData.commands, shellEnvironment)
+		unsetCommands(oldProject.commands, shellEnvironment)
 		unsetVariables(oldProject.exports, shellEnvironment)
 	}
 	

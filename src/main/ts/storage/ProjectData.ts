@@ -56,7 +56,7 @@ export interface ProjectData {
  */
 export function readProjectYml(data: string) : ProjectData {
 	var loadedData = jsYaml.safeLoad(data)
-	var project = loadedData.config || loadedData.layout
+	var project = loadedData.config || loadedData.layout || {name: "<broken data>"}
 	
 	ensureArray(project, "requires")
 	ensureArray(project, "layouts")

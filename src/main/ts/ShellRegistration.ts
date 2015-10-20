@@ -5,8 +5,12 @@ var shellEnvironment = new BashEnvironment();
 var runMode = process.argv[2]
 
 if (!runMode) {
-	shellEnvironment.log("You need to define a runMode")
-	shellEnvironment.flush()
+	console.error(`You need to define a runMode, e.g.:
+	
+	$ eval $(archer project)
+	$ project -n test
+	$ project test
+	`)
 	process.exit(1)
 }
 

@@ -28,7 +28,6 @@ export function parseParameters(shellEnvironment: Environment) : ParsedShellPara
 			flag: true
 		})
 		.option("layout", {
-			abbr: "l",
 			help: "Specify that we want to use the layouts.",
 			flag: true
 		})
@@ -37,6 +36,7 @@ export function parseParameters(shellEnvironment: Environment) : ParsedShellPara
 			required: true
 		})
 		.option("list", {
+			abbr: "l",
 			help: "List the available projects.",
 			flag: true
 		}).printer((message, code?) => {

@@ -25,7 +25,7 @@ function selectProject(shellEnvironment, shellParameters) {
     if (oldProjectName) {
         var oldProject = readProjectData(oldProjectName, shellParameters.internalRunMode);
         executeCommands(oldProject.deactivate, shellEnvironment);
-        unsetCommands(projectData.commands, shellEnvironment);
+        unsetCommands(oldProject.commands, shellEnvironment);
         unsetVariables(oldProject.exports, shellEnvironment);
     }
     // 3. make the variable exports
