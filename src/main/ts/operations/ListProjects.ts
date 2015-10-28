@@ -10,6 +10,8 @@ import {readProjectYml} from "../storage/ProjectData"
 export function listProjects(shellEnvironment : Environment, shellParameters: ParsedShellParameters) {
 	var folder = projectFolder(shellParameters) 
 	
+	shellEnvironment.log("Available projects:")
+	
 	try {
 		readDir(folder)
 			.map((it) => {
@@ -28,7 +30,7 @@ export function listProjects(shellEnvironment : Environment, shellParameters: Pa
 					projectName: projectData.name
 				}
 			})
-			.forEach(it => shellEnvironment.log(it.fileName + ": " + it.projectName))
+			.forEach(it => shellEnvironment.log(" - " + it.fileName + ": " + it.projectName))
 	} catch(e) {
 		shellEnvironment.log("ERROR: " + e.toString() + ':\n' + e.stack);
 		shellEnvironment.log("ERROR: Unable to read projects from: " + folder);

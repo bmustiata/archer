@@ -4,6 +4,7 @@ var IO_1 = require("../storage/IO");
 var ProjectData_1 = require("../storage/ProjectData");
 function listProjects(shellEnvironment, shellParameters) {
     var folder = ReadEnvironment_1.projectFolder(shellParameters);
+    shellEnvironment.log("Available projects:");
     try {
         IO_1.readDir(folder)
             .map(function (it) {
@@ -21,7 +22,7 @@ function listProjects(shellEnvironment, shellParameters) {
                 projectName: projectData.name
             };
         })
-            .forEach(function (it) { return shellEnvironment.log(it.fileName + ": " + it.projectName); });
+            .forEach(function (it) { return shellEnvironment.log(" - " + it.fileName + ": " + it.projectName); });
     }
     catch (e) {
         shellEnvironment.log("ERROR: " + e.toString() + ':\n' + e.stack);
